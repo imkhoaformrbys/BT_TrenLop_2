@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="SỬA THÔNG TIN NHÂN VIÊN KIỂM THỬ"
+        android:textColor="@android:color/holo_red_dark" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mã nhân viên:" />
+
+    <EditText
+        android:id="@+id/txtMNV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Họ tên nv:" />
+
+    <EditText
+        android:id="@+id/txthoten"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Loại kiểm thử:" />
+
+
+    <RadioGroup
+        android:id="@+id/gplkt"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" >
+
+        <RadioButton
+            android:id="@+id/rdchucnang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kiểm thử chức năng" />
+
+        <RadioButton
+            android:id="@+id/rdhethong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kiểm thử hệ thống" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSua"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quay lại" />
+
+
+</LinearLayout>
