@@ -1,30 +1,336 @@
-# BÀI THI KIỂM TRA GIỮA KỲ - PHÁT TRIỂN ỨNG DỤNG DI ĐỘNG
-## ỨNG DỤNG QUẢN LÝ ĐẶT XE CỦA CỬA HÀNG CHO THUÊ Ô TÔ (CarBookingManagement)
+# TỔNG HỢP TOÀN BỘ SOURCE CODE JAVA ĐẠT 10 ĐIỂM
+## ĐỀ THI GIỮA KỲ: QUẢN LÝ ĐẶT XE CỦA CỬA HÀNG CHO THUÊ Ô TÔ (CarBookingManagement)
 
-- **Dự án**: CarBookingManagement  
-- **Package**: `com.rbys.carbookingmanagement`  
-- **Đường dẫn**: `D:\School\NH_2026-2027\PT_UDDD\BT_TrenLop_2\CarBookingManagement`
-
----
-
-## MỤC LỤC BÀI LÀM THEO YÊU CẦU ĐỀ THI
-
-1. [Tạo lớp CSDL CarBooking_DatabaseHandler kế thừa class SQLiteOpenHelper (1đ)](#1-tạo-lớp-csdl-carbooking_databasehandler-kế-thừa-class-sqliteopenhelper-1đ)
-   - [a. Viết Constructor cho class CarBooking_DatabaseHandler](#a-viết-constructor-cho-class-carbooking_databasehandler)
-   - [b. Override phương thức onCreate](#b-override-phương-thức-oncreate)
-   - [c. Tạo các phương thức truy xuất dữ liệu](#c-tạo-các-phương-thức-truy-xuất-dữ-liệu)
-   - [Phụ lục Model & DataSource (HangXe, Xe, XeDataSource)](#phụ-lục-các-lớp-model-và-datasource-bổ-trợ)
-2. [Tạo OnCreate của Main Activity (1đ)](#2-tạo-oncreate-của-main-activity-1đ)
-3. [Viết phương thức xử lý sự kiện OnClick của button THÊM XE (1.5đ)](#3-viết-phương-thức-xử-lý-sự-kiện-onclick-của-button-thêm-xe-15đ)
-4. [Viết phương thức xử lý sự kiện OnClick của button ĐẶT XE (2đ)](#4-viết-phương-thức-xử-lý-sự-kiện-onclick-của-button-đặt-xe-2đ)
-5. [Viết phương thức xử lý sự kiện OnClick của button ĐÓNG (0.5đ)](#5-viết-phương-thức-xử-lý-sự-kiện-onclick-của-button-đóng-05đ)
-6. [Gắn phương thức xử lý sự kiện cho ListView và Context Menu vào ListView (4đ)](#6-gắn-phương-thức-xử-lý-sự-kiện-cho-listview-và-context-menu-vào-listview-4đ)
+> **Dự án**: CarBookingManagement  
+> **Package**: `com.rbys.carbookingmanagement`  
+> *(Lưu ý: Không bao gồm các file layout XML vì giao diện sẽ được vẽ/kéo-thả lại khi thực hành).*
 
 ---
 
-## 1. Tạo lớp CSDL CarBooking_DatabaseHandler kế thừa class SQLiteOpenHelper (1đ)
+## MỤC LỤC
+1. [HƯỚNG DẪN CHI TIẾT THEO BAREM ĐIỂM ĐỀ THI (10 ĐIỂM)](#1-hướng-dẫn-chi-tiết-theo-barem-điểm-đề-thi-10-điểm)
+   - [Câu 1: Lớp CSDL CarBooking_DatabaseHandler (1.0đ)](#câu-1-lớp-csdl-carbooking_databasehandler-10đ)
+   - [Câu 2: Phương thức onCreate của MainActivity (1.0đ)](#câu-2-phương-thức-oncreate-của-mainactivity-10đ)
+   - [Câu 3: Xử lý sự kiện OnClick button THÊM XE (1.5đ)](#câu-3-xử-lý-sự-kiện-onclick-button-thêm-xe-15đ)
+   - [Câu 4: Xử lý sự kiện OnClick button ĐẶT XE & DatXeActivity (2.0đ)](#câu-4-xử-lý-sự-kiện-onclick-button-đặt-xe--datxeactivity-20đ)
+   - [Câu 5: Xử lý sự kiện OnClick button ĐÓNG (0.5đ)](#câu-5-xử-lý-sự-kiện-onclick-button-đóng-05đ)
+   - [Câu 6: Gắn sự kiện ListView và Context Menu (4.0đ)](#câu-6-gắn-sự-kiện-listview-và-context-menu-40đ)
+2. [SOURCE CODE ĐẦY ĐỦ NGUYÊN FILE TỪNG LỚP JAVA](#2-source-code-đầy-đủ-nguyên-file-từng-lớp-java)
+   - [2.1 CarBooking_DatabaseHandler.java](#21-carbooking_databasehandlerjava)
+   - [2.2 Xe.java (Model)](#22-xejava-model)
+   - [2.3 HangXe.java (Model)](#23-hangxejava-model)
+   - [2.4 MainActivity.java](#24-mainactivityjava)
+   - [2.5 DatXeActivity.java](#25-datxeactivityjava)
+   - [2.6 XeDataSource.java](#26-xedatasourcejava)
+   - [2.7 HangXeDataSource.java](#27-hangxedatasourcejava)
+3. [FILE CẤU HÌNH BỔ TRỢ](#3-file-cấu-hình-bổ-trợ)
+   - [3.1 context_menu_xe.xml (res/menu)](#31-context_menu_xexml-resmenu)
+   - [3.2 AndroidManifest.xml](#32-androidmanifestxml)
 
-File: `CarBooking_DatabaseHandler.java`  
+---
+
+## 1. HƯỚNG DẪN CHI TIẾT THEO BAREM ĐIỂM ĐỀ THI (10 ĐIỂM)
+
+### Câu 1: Lớp CSDL CarBooking_DatabaseHandler (1.0đ)
+Kế thừa `SQLiteOpenHelper`, quản lý 2 bảng `tblHangXe` và `tblXe`.
+
+- **a. Constructor (0.25đ):**
+```java
+public CarBooking_DatabaseHandler(Context context) {
+    super(context, DATABASE_NAME, null, DATABASE_VERSION);
+}
+```
+
+- **b. Override onCreate (0.25đ):**  
+Tạo 2 bảng `tblHangXe` (MaHang, TenHang) và `tblXe` (BienSo, NamSX, GiaTri, MaHang, TenKhach, SDTKhach), đồng thời chèn dữ liệu mẫu ban đầu:
+```java
+@Override
+public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    String q = "CREATE TABLE tblHangXe (MaHang INTEGER PRIMARY KEY, TenHang VARCHAR UNIQUE)";
+    sqLiteDatabase.execSQL(q);
+
+    q = "CREATE TABLE tblXe (BienSo VARCHAR PRIMARY KEY, NamSX INTEGER, GiaTri REAL, "
+            + "MaHang INTEGER REFERENCES tblHangXe(MaHang) ON DELETE CASCADE, "
+            + "TenKhach VARCHAR, SDTKhach VARCHAR)";
+    sqLiteDatabase.execSQL(q);
+
+    // Chèn dữ liệu hãng xe
+    sqLiteDatabase.execSQL("INSERT INTO tblHangXe VALUES(1, 'Toyota')");
+    sqLiteDatabase.execSQL("INSERT INTO tblHangXe VALUES(2, 'Honda')");
+    sqLiteDatabase.execSQL("INSERT INTO tblHangXe VALUES(3, 'Mitsubishi')");
+    sqLiteDatabase.execSQL("INSERT INTO tblHangXe VALUES(4, 'Ford')");
+    sqLiteDatabase.execSQL("INSERT INTO tblHangXe VALUES(5, 'Hyundai')");
+
+    // Chèn dữ liệu xe mẫu (khớp với hình đề bài)
+    sqLiteDatabase.execSQL("INSERT INTO tblXe VALUES('61A32194', 2018, 400.0, 1, '', '')");
+    sqLiteDatabase.execSQL("INSERT INTO tblXe VALUES('64C67598', 2019, 500.0, 3, '', '')");
+    sqLiteDatabase.execSQL("INSERT INTO tblXe VALUES('51A12345', 2020, 650.0, 2, '', '')");
+}
+```
+
+- **c. Các phương thức truy xuất dữ liệu (0.5đ):**  
+Gồm thêm, sửa, xóa, đặt xe và truy vấn danh sách:
+```java
+public long themXe(String bienSo, int namSX, double giaTri, int maHang);
+public int suaXe(String bienSo, int namSX, double giaTri, int maHang);
+public int xoaXe(String bienSo);
+public int datXe(String bienSo, String tenKhach, String sdtKhach);
+public ArrayList<Xe> xuatDSXe();
+public ArrayList<HangXe> xuatDSHangXe();
+```
+
+---
+
+### Câu 2: Phương thức onCreate của MainActivity (1.0đ)
+Khởi tạo View, kết nối CSDL, load dữ liệu hãng xe vào Spinner, nạp danh sách xe vào ListView và đăng ký Context Menu:
+```java
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+
+    // 1. Ánh xạ View
+    edtBienSo = findViewById(R.id.edtBienSo);
+    edtNamSX = findViewById(R.id.edtNamSX);
+    edtGiaTri = findViewById(R.id.edtGiaTri);
+    spnHangXe = findViewById(R.id.spnHangXe);
+    btnThemXe = findViewById(R.id.btnThemXe);
+    btnDatXe = findViewById(R.id.btnDatXe);
+    btnDong = findViewById(R.id.btnDong);
+    lvDanhSachXe = findViewById(R.id.lvDanhSachXe);
+
+    // 2. Mở kết nối CSDL
+    hangXeDataSource = new HangXeDataSource(this);
+    hangXeDataSource.open();
+    xeDataSource = new XeDataSource(this);
+    xeDataSource.open();
+
+    // 3. Đổ dữ liệu Hãng xe lên Spinner
+    dsHangXe = hangXeDataSource.xuatDSHangXe();
+    adapterHangXe = new ArrayAdapter<HangXe>(this, android.R.layout.simple_spinner_item, dsHangXe);
+    adapterHangXe.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    spnHangXe.setAdapter(adapterHangXe);
+
+    // 4. Đổ dữ liệu Xe lên ListView
+    dsXe = xeDataSource.xuatDSXe();
+    adapterXe = new ArrayAdapter<Xe>(this, android.R.layout.simple_list_item_1, dsXe);
+    lvDanhSachXe.setAdapter(adapterXe);
+
+    // 5. Đăng ký Context Menu cho ListView
+    registerForContextMenu(lvDanhSachXe);
+
+    // 6. Gắn các Listener
+    lvDanhSachXe.setOnItemClickListener((parent, view, position, id) -> {
+        selectedPosition = position;
+        hienThiThongTinXe(position);
+    });
+
+    lvDanhSachXe.setOnItemLongClickListener((parent, view, position, id) -> {
+        selectedPosition = position;
+        hienThiThongTinXe(position);
+        return false;
+    });
+
+    btnThemXe.setOnClickListener(v -> xuLyThemXe());
+    btnDatXe.setOnClickListener(v -> xuLyDatXe());
+    btnDong.setOnClickListener(v -> xuLyDong());
+}
+```
+
+---
+
+### Câu 3: Xử lý sự kiện OnClick button THÊM XE (1.5đ)
+Đọc dữ liệu từ form, kiểm tra hợp lệ, thêm vào CSDL và cập nhật ListView:
+```java
+private void xuLyThemXe() {
+    String bienSo = edtBienSo.getText().toString().trim();
+    String namSXStr = edtNamSX.getText().toString().trim();
+    String giaTriStr = edtGiaTri.getText().toString().trim();
+
+    if (bienSo.isEmpty() || namSXStr.isEmpty() || giaTriStr.isEmpty()) {
+        Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin xe!", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    int namSX;
+    double giaTri;
+    try {
+        namSX = Integer.parseInt(namSXStr);
+        giaTri = Double.parseDouble(giaTriStr);
+    } catch (NumberFormatException e) {
+        Toast.makeText(this, "Năm sản xuất hoặc giá trị không hợp lệ!", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
+    int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
+
+    long result = xeDataSource.themXe(bienSo, namSX, giaTri, maHang);
+    if (result != -1) {
+        capNhatDanhSachXe();
+        Toast.makeText(this, "Thêm xe thành công!", Toast.LENGTH_SHORT).show();
+        xoaTrangForm();
+    } else {
+        Toast.makeText(this, "Thêm xe thất bại (Biển số có thể đã tồn tại)!", Toast.LENGTH_SHORT).show();
+    }
+}
+```
+
+---
+
+### Câu 4: Xử lý sự kiện OnClick button ĐẶT XE & DatXeActivity (2.0đ)
+- Khi ấn **ĐẶT XE**, kiểm tra xe đã chọn trên ListView, truyền đối tượng `Xe` sang màn hình 2 (`DatXeActivity`).
+- Tại màn hình 2, người dùng nhập tên khách, lưu vào CSDL và hiện Toast: `"Khách hàng <ten> da dat xe <hang> <bienso> <giatri>. Saving into database"`. Nút **QUAY LẠI** kết thúc màn hình.
+
+**Tại MainActivity.java:**
+```java
+private void xuLyDatXe() {
+    if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+        Toast.makeText(this, "Vui lòng chọn 1 xe trên danh sách để đặt!", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    Xe xe = dsXe.get(selectedPosition);
+    Intent intent = new Intent(MainActivity.this, DatXeActivity.class);
+    intent.putExtra("XE", xe);
+    startActivityForResult(intent, REQUEST_CODE_DAT_XE);
+}
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == REQUEST_CODE_DAT_XE) {
+        capNhatDanhSachXe();
+    }
+}
+```
+
+**Tại DatXeActivity.java:**
+```java
+btnThucHienDatXe.setOnClickListener(v -> {
+    String tenKhach = edtTenKhach.getText().toString().trim();
+    if (tenKhach.isEmpty()) {
+        Toast.makeText(this, "Vui lòng nhập tên khách hàng!", Toast.LENGTH_SHORT).show();
+        return;
+    }
+
+    if (xeDuocChon != null) {
+        xeDataSource.datXe(xeDuocChon.getBienSo(), tenKhach, "");
+        xeDuocChon.setTenKhach(tenKhach);
+
+        String msg = "Khách hàng " + tenKhach + " da dat xe "
+                + xeDuocChon.getTenHang() + " "
+                + xeDuocChon.getBienSo() + " "
+                + xeDuocChon.getGiaTri() + ". Saving into database";
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("UPDATED_XE", xeDuocChon);
+        setResult(RESULT_OK, resultIntent);
+    }
+});
+
+btnQuayLai.setOnClickListener(v -> finish());
+```
+
+---
+
+### Câu 5: Xử lý sự kiện OnClick button ĐÓNG (0.5đ)
+Đóng kết nối các DataSource và đóng Activity:
+```java
+private void xuLyDong() {
+    if (xeDataSource != null) xeDataSource.close();
+    if (hangXeDataSource != null) hangXeDataSource.close();
+    finish();
+}
+```
+
+---
+
+### Câu 6: Gắn sự kiện ListView và Context Menu (4.0đ)
+- **Đọc thông tin xe lên các ô khi chọn item (1.0đ):**
+```java
+private void hienThiThongTinXe(int position) {
+    if (position >= 0 && position < dsXe.size()) {
+        Xe xe = dsXe.get(position);
+        edtBienSo.setText(xe.getBienSo());
+        edtNamSX.setText(String.valueOf(xe.getNamSX()));
+        edtGiaTri.setText(String.valueOf(xe.getGiaTri()));
+
+        for (int i = 0; i < dsHangXe.size(); i++) {
+            if (dsHangXe.get(i).getMaHang() == xe.getMaHang()) {
+                spnHangXe.setSelection(i);
+                break;
+            }
+        }
+    }
+}
+```
+
+- **Tạo Context Menu (1.0đ):**
+```java
+@Override
+public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    getMenuInflater().inflate(R.menu.context_menu_xe, menu);
+}
+```
+
+- **Hiện thực chức năng menu item (Add - Edit - Delete) (2.0đ):**
+```java
+@Override
+public boolean onContextItemSelected(@NonNull MenuItem item) {
+    int itemId = item.getItemId();
+    if (itemId == R.id.mnuAdd) {
+        xuLyThemXe();
+        return true;
+    } else if (itemId == R.id.mnuEdit) {
+        if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+            Toast.makeText(this, "Vui lòng chọn xe để sửa!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        String bienSo = edtBienSo.getText().toString().trim();
+        int namSX = Integer.parseInt(edtNamSX.getText().toString().trim());
+        double giaTri = Double.parseDouble(edtGiaTri.getText().toString().trim());
+        HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
+        int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
+
+        int rows = xeDataSource.suaXe(bienSo, namSX, giaTri, maHang);
+        if (rows > 0) {
+            capNhatDanhSachXe();
+            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    } else if (itemId == R.id.mnuDelete) {
+        if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+            Toast.makeText(this, "Vui lòng chọn xe để xóa!", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        Xe xe = dsXe.get(selectedPosition);
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận")
+                .setMessage("Có thật sự muốn xóa xe " + xe.getBienSo() + " ?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    xeDataSource.xoaXe(xe.getBienSo());
+                    dsXe.remove(selectedPosition);
+                    adapterXe.notifyDataSetChanged();
+                    xoaTrangForm();
+                    Toast.makeText(this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("No", null)
+                .create().show();
+        return true;
+    }
+    return super.onContextItemSelected(item);
+}
+```
+
+---
+
+## 2. SOURCE CODE ĐẦY ĐỦ NGUYÊN FILE TỪNG LỚP JAVA
+
+### 2.1 CarBooking_DatabaseHandler.java
 Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/CarBooking_DatabaseHandler.java`
 
 ```java
@@ -56,16 +362,10 @@ public class CarBooking_DatabaseHandler extends SQLiteOpenHelper {
 
     ArrayList<String> query_list = new ArrayList<String>();
 
-    // ==========================================================
-    // a. Viết Constructor cho class CarBooking_DatabaseHandler
-    // ==========================================================
     public CarBooking_DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    // ==========================================================
-    // b. Override phương thức onCreate
-    // ==========================================================
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String q = "CREATE TABLE " + TABLE_HANGXE + " ("
@@ -104,9 +404,6 @@ public class CarBooking_DatabaseHandler extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    // ==========================================================
-    // c. Tạo các phương thức truy xuất dữ liệu
-    // ==========================================================
     public long themXe(String bienSo, int namSX, double giaTri, int maHang) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -198,9 +495,11 @@ public class CarBooking_DatabaseHandler extends SQLiteOpenHelper {
 }
 ```
 
-### Phụ lục: Các lớp Model và DataSource bổ trợ
+---
 
-#### Model Xe.java
+### 2.2 Xe.java (Model)
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/Xe.java`
+
 ```java
 package com.rbys.carbookingmanagement;
 
@@ -215,7 +514,35 @@ public class Xe implements Serializable {
     private String tenKhach;
     private String sdtKhach;
 
-    public Xe() {}
+    public Xe() {
+        this.bienSo = "";
+        this.namSX = 0;
+        this.giaTri = 0.0;
+        this.maHang = 0;
+        this.tenHang = "";
+        this.tenKhach = "";
+        this.sdtKhach = "";
+    }
+
+    public Xe(String bienSo, int namSX, double giaTri, int maHang) {
+        this.bienSo = bienSo;
+        this.namSX = namSX;
+        this.giaTri = giaTri;
+        this.maHang = maHang;
+        this.tenHang = "";
+        this.tenKhach = "";
+        this.sdtKhach = "";
+    }
+
+    public Xe(String bienSo, int namSX, double giaTri, int maHang, String tenHang) {
+        this.bienSo = bienSo;
+        this.namSX = namSX;
+        this.giaTri = giaTri;
+        this.maHang = maHang;
+        this.tenHang = tenHang;
+        this.tenKhach = "";
+        this.sdtKhach = "";
+    }
 
     public Xe(String bienSo, int namSX, double giaTri, int maHang, String tenHang, String tenKhach, String sdtKhach) {
         this.bienSo = bienSo;
@@ -227,21 +554,61 @@ public class Xe implements Serializable {
         this.sdtKhach = sdtKhach;
     }
 
-    // Getters và Setters
-    public String getBienSo() { return bienSo; }
-    public void setBienSo(String bienSo) { this.bienSo = bienSo; }
-    public int getNamSX() { return namSX; }
-    public void setNamSX(int namSX) { this.namSX = namSX; }
-    public double getGiaTri() { return giaTri; }
-    public void setGiaTri(double giaTri) { this.giaTri = giaTri; }
-    public int getMaHang() { return maHang; }
-    public void setMaHang(int maHang) { this.maHang = maHang; }
-    public String getTenHang() { return tenHang; }
-    public void setTenHang(String tenHang) { this.tenHang = tenHang; }
-    public String getTenKhach() { return tenKhach; }
-    public void setTenKhach(String tenKhach) { this.tenKhach = tenKhach; }
-    public String getSdtKhach() { return sdtKhach; }
-    public void setSdtKhach(String sdtKhach) { this.sdtKhach = sdtKhach; }
+    public String getBienSo() {
+        return bienSo;
+    }
+
+    public void setBienSo(String bienSo) {
+        this.bienSo = bienSo;
+    }
+
+    public int getNamSX() {
+        return namSX;
+    }
+
+    public void setNamSX(int namSX) {
+        this.namSX = namSX;
+    }
+
+    public double getGiaTri() {
+        return giaTri;
+    }
+
+    public void setGiaTri(double giaTri) {
+        this.giaTri = giaTri;
+    }
+
+    public int getMaHang() {
+        return maHang;
+    }
+
+    public void setMaHang(int maHang) {
+        this.maHang = maHang;
+    }
+
+    public String getTenHang() {
+        return tenHang;
+    }
+
+    public void setTenHang(String tenHang) {
+        this.tenHang = tenHang;
+    }
+
+    public String getTenKhach() {
+        return tenKhach;
+    }
+
+    public void setTenKhach(String tenKhach) {
+        this.tenKhach = tenKhach;
+    }
+
+    public String getSdtKhach() {
+        return sdtKhach;
+    }
+
+    public void setSdtKhach(String sdtKhach) {
+        this.sdtKhach = sdtKhach;
+    }
 
     @Override
     public String toString() {
@@ -251,7 +618,11 @@ public class Xe implements Serializable {
 }
 ```
 
-#### Model HangXe.java
+---
+
+### 2.3 HangXe.java (Model)
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/HangXe.java`
+
 ```java
 package com.rbys.carbookingmanagement;
 
@@ -261,16 +632,29 @@ public class HangXe implements Serializable {
     private int maHang;
     private String tenHang;
 
-    public HangXe() {}
+    public HangXe() {
+    }
+
     public HangXe(int maHang, String tenHang) {
         this.maHang = maHang;
         this.tenHang = tenHang;
     }
 
-    public int getMaHang() { return maHang; }
-    public void setMaHang(int maHang) { this.maHang = maHang; }
-    public String getTenHang() { return tenHang; }
-    public void setTenHang(String tenHang) { this.tenHang = tenHang; }
+    public int getMaHang() {
+        return maHang;
+    }
+
+    public void setMaHang(int maHang) {
+        this.maHang = maHang;
+    }
+
+    public String getTenHang() {
+        return tenHang;
+    }
+
+    public void setTenHang(String tenHang) {
+        this.tenHang = tenHang;
+    }
 
     @Override
     public String toString() {
@@ -281,182 +665,315 @@ public class HangXe implements Serializable {
 
 ---
 
-## 2. Tạo OnCreate của Main Activity (1đ)
-
-Khởi tạo các thành phần giao diện, kết nối Database, load danh sách Hãng xe lên Spinner và danh sách Xe lên ListView, đăng ký Context Menu cho ListView:
+### 2.4 MainActivity.java
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/MainActivity.java`
 
 ```java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    EdgeToEdge.enable(this);
-    setContentView(R.layout.activity_main);
-    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-        Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-        v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-        return insets;
-    });
+package com.rbys.carbookingmanagement;
 
-    // Ánh xạ các View
-    edtBienSo = findViewById(R.id.edtBienSo);
-    edtNamSX = findViewById(R.id.edtNamSX);
-    edtGiaTri = findViewById(R.id.edtGiaTri);
-    spnHangXe = findViewById(R.id.spnHangXe);
-    btnThemXe = findViewById(R.id.btnThemXe);
-    btnDatXe = findViewById(R.id.btnDatXe);
-    btnDong = findViewById(R.id.btnDong);
-    lvDanhSachXe = findViewById(R.id.lvDanhSachXe);
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-    // Khởi tạo và mở DataSource
-    hangXeDataSource = new HangXeDataSource(this);
-    hangXeDataSource.open();
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-    xeDataSource = new XeDataSource(this);
-    xeDataSource.open();
+import java.util.ArrayList;
 
-    // Nạp dữ liệu vào Spinner Hãng xe
-    dsHangXe = hangXeDataSource.xuatDSHangXe();
-    adapterHangXe = new ArrayAdapter<HangXe>(this,
-            android.R.layout.simple_spinner_item, dsHangXe);
-    adapterHangXe.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spnHangXe.setAdapter(adapterHangXe);
+public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE_DAT_XE = 100;
 
-    // Nạp dữ liệu vào ListView Danh sách xe
-    dsXe = xeDataSource.xuatDSXe();
-    adapterXe = new ArrayAdapter<Xe>(this,
-            android.R.layout.simple_list_item_1, dsXe);
-    lvDanhSachXe.setAdapter(adapterXe);
+    private EditText edtBienSo, edtNamSX, edtGiaTri;
+    private Spinner spnHangXe;
+    private Button btnThemXe, btnDatXe, btnDong;
+    private ListView lvDanhSachXe;
 
-    // Đăng ký Context Menu cho ListView
-    registerForContextMenu(lvDanhSachXe);
+    private XeDataSource xeDataSource;
+    private HangXeDataSource hangXeDataSource;
 
-    // Gắn sự kiện click và long click cho ListView
-    lvDanhSachXe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            selectedPosition = position;
-            hienThiThongTinXe(position);
+    private ArrayList<Xe> dsXe;
+    private ArrayList<HangXe> dsHangXe;
+    private ArrayAdapter<Xe> adapterXe;
+    private ArrayAdapter<HangXe> adapterHangXe;
+
+    private int selectedPosition = -1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        edtBienSo = findViewById(R.id.edtBienSo);
+        edtNamSX = findViewById(R.id.edtNamSX);
+        edtGiaTri = findViewById(R.id.edtGiaTri);
+        spnHangXe = findViewById(R.id.spnHangXe);
+        btnThemXe = findViewById(R.id.btnThemXe);
+        btnDatXe = findViewById(R.id.btnDatXe);
+        btnDong = findViewById(R.id.btnDong);
+        lvDanhSachXe = findViewById(R.id.lvDanhSachXe);
+
+        hangXeDataSource = new HangXeDataSource(this);
+        hangXeDataSource.open();
+
+        xeDataSource = new XeDataSource(this);
+        xeDataSource.open();
+
+        dsHangXe = hangXeDataSource.xuatDSHangXe();
+        adapterHangXe = new ArrayAdapter<HangXe>(this,
+                android.R.layout.simple_spinner_item, dsHangXe);
+        adapterHangXe.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnHangXe.setAdapter(adapterHangXe);
+
+        dsXe = xeDataSource.xuatDSXe();
+        adapterXe = new ArrayAdapter<Xe>(this,
+                android.R.layout.simple_list_item_1, dsXe);
+        lvDanhSachXe.setAdapter(adapterXe);
+
+        registerForContextMenu(lvDanhSachXe);
+
+        lvDanhSachXe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                selectedPosition = position;
+                hienThiThongTinXe(position);
+            }
+        });
+
+        lvDanhSachXe.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                selectedPosition = position;
+                hienThiThongTinXe(position);
+                return false;
+            }
+        });
+
+        btnThemXe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                xuLyThemXe();
+            }
+        });
+
+        btnDatXe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                xuLyDatXe();
+            }
+        });
+
+        btnDong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                xuLyDong();
+            }
+        });
+    }
+
+    private void hienThiThongTinXe(int position) {
+        if (position >= 0 && position < dsXe.size()) {
+            Xe xe = dsXe.get(position);
+            edtBienSo.setText(xe.getBienSo());
+            edtNamSX.setText(String.valueOf(xe.getNamSX()));
+            edtGiaTri.setText(String.valueOf(xe.getGiaTri()));
+
+            for (int i = 0; i < dsHangXe.size(); i++) {
+                if (dsHangXe.get(i).getMaHang() == xe.getMaHang()) {
+                    spnHangXe.setSelection(i);
+                    break;
+                }
+            }
         }
-    });
+    }
 
-    lvDanhSachXe.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-            selectedPosition = position;
-            hienThiThongTinXe(position);
-            return false;
+    private void xuLyThemXe() {
+        String bienSo = edtBienSo.getText().toString().trim();
+        String namSXStr = edtNamSX.getText().toString().trim();
+        String giaTriStr = edtGiaTri.getText().toString().trim();
+
+        if (bienSo.isEmpty() || namSXStr.isEmpty() || giaTriStr.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin xe!", Toast.LENGTH_SHORT).show();
+            return;
         }
-    });
 
-    // Gắn sự kiện click các nút
-    btnThemXe.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+        int namSX;
+        double giaTri;
+        try {
+            namSX = Integer.parseInt(namSXStr);
+            giaTri = Double.parseDouble(giaTriStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Năm sản xuất hoặc giá trị không hợp lệ!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
+        int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
+
+        long result = xeDataSource.themXe(bienSo, namSX, giaTri, maHang);
+        if (result != -1) {
+            capNhatDanhSachXe();
+            Toast.makeText(this, "Thêm xe thành công!", Toast.LENGTH_SHORT).show();
+            xoaTrangForm();
+        } else {
+            Toast.makeText(this, "Thêm xe thất bại (Biển số có thể đã tồn tại)!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void xuLyDatXe() {
+        if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+            Toast.makeText(this, "Vui lòng chọn 1 xe trên danh sách để đặt!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Xe xe = dsXe.get(selectedPosition);
+        Intent intent = new Intent(MainActivity.this, DatXeActivity.class);
+        intent.putExtra("XE", xe);
+        startActivityForResult(intent, REQUEST_CODE_DAT_XE);
+    }
+
+    private void xuLyDong() {
+        if (xeDataSource != null) {
+            xeDataSource.close();
+        }
+        if (hangXeDataSource != null) {
+            hangXeDataSource.close();
+        }
+        finish();
+    }
+
+    private void capNhatDanhSachXe() {
+        dsXe.clear();
+        dsXe.addAll(xeDataSource.xuatDSXe());
+        adapterXe.notifyDataSetChanged();
+    }
+
+    private void xoaTrangForm() {
+        edtBienSo.setText("");
+        edtNamSX.setText("");
+        edtGiaTri.setText("");
+        edtBienSo.requestFocus();
+        selectedPosition = -1;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        getMenuInflater().inflate(R.menu.context_menu_xe, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.mnuAdd) {
             xuLyThemXe();
-        }
-    });
+            return true;
+        } else if (itemId == R.id.mnuEdit) {
+            if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+                Toast.makeText(this, "Vui lòng chọn xe để sửa!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            String bienSo = edtBienSo.getText().toString().trim();
+            String namSXStr = edtNamSX.getText().toString().trim();
+            String giaTriStr = edtGiaTri.getText().toString().trim();
 
-    btnDatXe.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            xuLyDatXe();
-        }
-    });
+            if (bienSo.isEmpty() || namSXStr.isEmpty() || giaTriStr.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin để sửa!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
 
-    btnDong.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            xuLyDong();
+            int namSX = Integer.parseInt(namSXStr);
+            double giaTri = Double.parseDouble(giaTriStr);
+            HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
+            int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
+
+            int rows = xeDataSource.suaXe(bienSo, namSX, giaTri, maHang);
+            if (rows > 0) {
+                capNhatDanhSachXe();
+                Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (itemId == R.id.mnuDelete) {
+            if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
+                Toast.makeText(this, "Vui lòng chọn xe để xóa!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            Xe xe = dsXe.get(selectedPosition);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Xác nhận");
+            builder.setMessage("Có thật sự muốn xóa xe " + xe.getBienSo() + " ?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    xeDataSource.xoaXe(xe.getBienSo());
+                    dsXe.remove(selectedPosition);
+                    adapterXe.notifyDataSetChanged();
+                    xoaTrangForm();
+                    Toast.makeText(MainActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.create().show();
+            return true;
         }
-    });
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_DAT_XE) {
+            capNhatDanhSachXe();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (xeDataSource != null) {
+            xeDataSource.close();
+        }
+        if (hangXeDataSource != null) {
+            hangXeDataSource.close();
+        }
+    }
 }
 ```
 
 ---
 
-## 3. Viết phương thức xử lý sự kiện OnClick của button THÊM XE (1.5đ)
+### 2.5 DatXeActivity.java
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/DatXeActivity.java`
 
-Lấy dữ liệu từ các ô thông tin (Biển số xe, Năm sản xuất, Giá trị xe, Hãng xe), kiểm tra validation, thêm vào SQLite Database và cập nhật danh sách xe hiển thị trên ListView:
-
-```java
-private void xuLyThemXe() {
-    String bienSo = edtBienSo.getText().toString().trim();
-    String namSXStr = edtNamSX.getText().toString().trim();
-    String giaTriStr = edtGiaTri.getText().toString().trim();
-
-    if (bienSo.isEmpty() || namSXStr.isEmpty() || giaTriStr.isEmpty()) {
-        Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin xe!", Toast.LENGTH_SHORT).show();
-        return;
-    }
-
-    int namSX;
-    double giaTri;
-    try {
-        namSX = Integer.parseInt(namSXStr);
-        giaTri = Double.parseDouble(giaTriStr);
-    } catch (NumberFormatException e) {
-        Toast.makeText(this, "Năm sản xuất hoặc giá trị không hợp lệ!", Toast.LENGTH_SHORT).show();
-        return;
-    }
-
-    HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
-    int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
-
-    long result = xeDataSource.themXe(bienSo, namSX, giaTri, maHang);
-    if (result != -1) {
-        capNhatDanhSachXe();
-        Toast.makeText(this, "Thêm xe thành công!", Toast.LENGTH_SHORT).show();
-        xoaTrangForm();
-    } else {
-        Toast.makeText(this, "Thêm xe thất bại (Biển số có thể đã tồn tại)!", Toast.LENGTH_SHORT).show();
-    }
-}
-
-private void capNhatDanhSachXe() {
-    dsXe.clear();
-    dsXe.addAll(xeDataSource.xuatDSXe());
-    adapterXe.notifyDataSetChanged();
-}
-
-private void xoaTrangForm() {
-    edtBienSo.setText("");
-    edtNamSX.setText("");
-    edtGiaTri.setText("");
-    edtBienSo.requestFocus();
-    selectedPosition = -1;
-}
-```
-
----
-
-## 4. Viết phương thức xử lý sự kiện OnClick của button ĐẶT XE (2đ)
-
-Kiểm tra người dùng đã chọn xe từ danh sách chưa, truyền thông tin `Xe` qua `DatXeActivity` (Màn hình BOOKING INFO), nhập tên khách và lưu vào CSDL, hiển thị thông báo đặt thành công theo đúng yêu cầu:
-
-### Code xử lý tại MainActivity.java
-```java
-private void xuLyDatXe() {
-    if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
-        Toast.makeText(this, "Vui lòng chọn 1 xe trên danh sách để đặt!", Toast.LENGTH_SHORT).show();
-        return;
-    }
-
-    Xe xe = dsXe.get(selectedPosition);
-    Intent intent = new Intent(MainActivity.this, DatXeActivity.class);
-    intent.putExtra("XE", xe);
-    startActivityForResult(intent, REQUEST_CODE_DAT_XE);
-}
-
-@Override
-protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == REQUEST_CODE_DAT_XE) {
-        capNhatDanhSachXe();
-    }
-}
-```
-
-### Code Màn hình đặt xe (DatXeActivity.java)
 ```java
 package com.rbys.carbookingmanagement;
 
@@ -538,323 +1055,239 @@ public class DatXeActivity extends AppCompatActivity {
 
 ---
 
-## 5. Viết phương thức xử lý sự kiện OnClick của button ĐÓNG (0.5đ)
-
-Đóng kết nối các DataSource và đóng màn hình ứng dụng:
+### 2.6 XeDataSource.java
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/XeDataSource.java`
 
 ```java
-private void xuLyDong() {
-    if (xeDataSource != null) {
-        xeDataSource.close();
+package com.rbys.carbookingmanagement;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
+public class XeDataSource {
+    private Context context;
+    private CarBooking_DatabaseHandler dbHelper;
+    private SQLiteDatabase database;
+
+    public XeDataSource(Context context) {
+        this.context = context;
+        dbHelper = new CarBooking_DatabaseHandler(context);
     }
-    if (hangXeDataSource != null) {
-        hangXeDataSource.close();
+
+    public XeDataSource open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+        database.execSQL("PRAGMA foreign_keys=ON;");
+        return this;
     }
-    finish();
+
+    public void close() {
+        dbHelper.close();
+    }
+
+    public long themXe(String bienSo, int namSX, double giaTri, int maHang) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_BIENSO, bienSo);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_NAMSX, namSX);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_GIATRI, giaTri);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_MAHANG_FK, maHang);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_TENKHACH, "");
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_SDTKHACH, "");
+        return database.insert(CarBooking_DatabaseHandler.TABLE_XE, null, contentValues);
+    }
+
+    public int suaXe(String bienSo, int namSX, double giaTri, int maHang) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_NAMSX, namSX);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_GIATRI, giaTri);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_MAHANG_FK, maHang);
+        return database.update(CarBooking_DatabaseHandler.TABLE_XE, contentValues,
+                CarBooking_DatabaseHandler.FIELD_BIENSO + "=?",
+                new String[]{bienSo});
+    }
+
+    public int xoaXe(String bienSo) {
+        return database.delete(CarBooking_DatabaseHandler.TABLE_XE,
+                CarBooking_DatabaseHandler.FIELD_BIENSO + "=?",
+                new String[]{bienSo});
+    }
+
+    public int datXe(String bienSo, String tenKhach, String sdtKhach) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_TENKHACH, tenKhach);
+        contentValues.put(CarBooking_DatabaseHandler.FIELD_SDTKHACH, sdtKhach);
+        return database.update(CarBooking_DatabaseHandler.TABLE_XE, contentValues,
+                CarBooking_DatabaseHandler.FIELD_BIENSO + "=?",
+                new String[]{bienSo});
+    }
+
+    public ArrayList<Xe> xuatDSXe() {
+        ArrayList<Xe> list = new ArrayList<Xe>();
+        String sql = "SELECT x." + CarBooking_DatabaseHandler.FIELD_BIENSO
+                + ", x." + CarBooking_DatabaseHandler.FIELD_NAMSX
+                + ", x." + CarBooking_DatabaseHandler.FIELD_GIATRI
+                + ", x." + CarBooking_DatabaseHandler.FIELD_MAHANG_FK
+                + ", h." + CarBooking_DatabaseHandler.FIELD_TENHANG
+                + ", x." + CarBooking_DatabaseHandler.FIELD_TENKHACH
+                + ", x." + CarBooking_DatabaseHandler.FIELD_SDTKHACH
+                + " FROM " + CarBooking_DatabaseHandler.TABLE_XE + " x LEFT JOIN "
+                + CarBooking_DatabaseHandler.TABLE_HANGXE + " h ON x."
+                + CarBooking_DatabaseHandler.FIELD_MAHANG_FK + " = h."
+                + CarBooking_DatabaseHandler.FIELD_MAHANG;
+
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Xe xe = new Xe(
+                        cursor.getString(0),
+                        cursor.getInt(1),
+                        cursor.getDouble(2),
+                        cursor.getInt(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                );
+                list.add(xe);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return list;
+    }
 }
 ```
 
 ---
 
-## 6. Gắn phương thức xử lý sự kiện cho ListView và Context Menu vào ListView (4đ)
+### 2.7 HangXeDataSource.java
+Đường dẫn: `CarBookingManagement/app/src/main/java/com/rbys/carbookingmanagement/HangXeDataSource.java`
 
-### a. Gắn sự kiện chọn item trên ListView (đọc dữ liệu lên các ô thông tin chỉ đọc)
 ```java
-private void hienThiThongTinXe(int position) {
-    if (position >= 0 && position < dsXe.size()) {
-        Xe xe = dsXe.get(position);
-        edtBienSo.setText(xe.getBienSo());
-        edtNamSX.setText(String.valueOf(xe.getNamSX()));
-        edtGiaTri.setText(String.valueOf(xe.getGiaTri()));
+package com.rbys.carbookingmanagement;
 
-        for (int i = 0; i < dsHangXe.size(); i++) {
-            if (dsHangXe.get(i).getMaHang() == xe.getMaHang()) {
-                spnHangXe.setSelection(i);
-                break;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+import java.util.ArrayList;
+
+public class HangXeDataSource {
+    private Context context;
+    private CarBooking_DatabaseHandler dbHelper;
+    private SQLiteDatabase database;
+
+    public HangXeDataSource(Context context) {
+        this.context = context;
+        dbHelper = new CarBooking_DatabaseHandler(context);
+    }
+
+    public HangXeDataSource open() throws SQLException {
+        database = dbHelper.getWritableDatabase();
+        return this;
+    }
+
+    public void close() {
+        dbHelper.close();
+    }
+
+    public long themHangXe(int maHang, String tenHang) {
+        ContentValues values = new ContentValues();
+        values.put(CarBooking_DatabaseHandler.FIELD_MAHANG, maHang);
+        values.put(CarBooking_DatabaseHandler.FIELD_TENHANG, tenHang);
+        return database.insert(CarBooking_DatabaseHandler.TABLE_HANGXE, null, values);
+    }
+
+    public ArrayList<HangXe> xuatDSHangXe() {
+        ArrayList<HangXe> list = new ArrayList<HangXe>();
+        String sql = "SELECT " + CarBooking_DatabaseHandler.FIELD_MAHANG + ", "
+                + CarBooking_DatabaseHandler.FIELD_TENHANG + " FROM " + CarBooking_DatabaseHandler.TABLE_HANGXE;
+        Cursor cursor = database.rawQuery(sql, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                HangXe hangXe = new HangXe(cursor.getInt(0), cursor.getString(1));
+                list.add(hangXe);
+                cursor.moveToNext();
             }
+            cursor.close();
         }
+        return list;
+    }
+
+    public String layTenHang(int maHang) {
+        String sql = "SELECT " + CarBooking_DatabaseHandler.FIELD_TENHANG
+                + " FROM " + CarBooking_DatabaseHandler.TABLE_HANGXE
+                + " WHERE " + CarBooking_DatabaseHandler.FIELD_MAHANG + " = " + maHang;
+        Cursor cursor = database.rawQuery(sql, null);
+        String tenHang = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            tenHang = cursor.getString(0);
+            cursor.close();
+        }
+        return tenHang;
     }
 }
 ```
 
-### b. Khởi tạo Context Menu (`res/menu/context_menu_xe.xml`)
+---
+
+## 3. FILE CẤU HÌNH BỔ TRỢ
+
+### 3.1 context_menu_xe.xml (res/menu)
+Đường dẫn: `CarBookingManagement/app/src/main/res/menu/context_menu_xe.xml`
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/mnuAdd" android:title="Add" />
-    <item android:id="@+id/mnuEdit" android:title="Edit" />
-    <item android:id="@+id/mnuDelete" android:title="Delete" />
+    <item
+        android:id="@+id/mnuAdd"
+        android:title="Add" />
+    <item
+        android:id="@+id/mnuEdit"
+        android:title="Edit" />
+    <item
+        android:id="@+id/mnuDelete"
+        android:title="Delete" />
 </menu>
 ```
 
-```java
-@Override
-public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-    super.onCreateContextMenu(menu, v, menuInfo);
-    getMenuInflater().inflate(R.menu.context_menu_xe, menu);
-}
-```
+### 3.2 AndroidManifest.xml
+Đường dẫn: `CarBookingManagement/app/src/main/AndroidManifest.xml`
 
-### c. Hiện thực chức năng các mục trong Context Menu (Add, Edit, Delete)
-```java
-@Override
-public boolean onContextItemSelected(@NonNull MenuItem item) {
-    int itemId = item.getItemId();
-    if (itemId == R.id.mnuAdd) {
-        xuLyThemXe();
-        return true;
-    } else if (itemId == R.id.mnuEdit) {
-        if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
-            Toast.makeText(this, "Vui lòng chọn xe để sửa!", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        String bienSo = edtBienSo.getText().toString().trim();
-        String namSXStr = edtNamSX.getText().toString().trim();
-        String giaTriStr = edtGiaTri.getText().toString().trim();
-
-        if (bienSo.isEmpty() || namSXStr.isEmpty() || giaTriStr.isEmpty()) {
-            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin để sửa!", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        int namSX = Integer.parseInt(namSXStr);
-        double giaTri = Double.parseDouble(giaTriStr);
-        HangXe hangXe = (HangXe) spnHangXe.getSelectedItem();
-        int maHang = (hangXe != null) ? hangXe.getMaHang() : 1;
-
-        int rows = xeDataSource.suaXe(bienSo, namSX, giaTri, maHang);
-        if (rows > 0) {
-            capNhatDanhSachXe();
-            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Cập nhật thất bại!", Toast.LENGTH_SHORT).show();
-        }
-        return true;
-    } else if (itemId == R.id.mnuDelete) {
-        if (selectedPosition < 0 || selectedPosition >= dsXe.size()) {
-            Toast.makeText(this, "Vui lòng chọn xe để xóa!", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        Xe xe = dsXe.get(selectedPosition);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Xác nhận");
-        builder.setMessage("Có thật sự muốn xóa xe " + xe.getBienSo() + " ?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                xeDataSource.xoaXe(xe.getBienSo());
-                dsXe.remove(selectedPosition);
-                adapterXe.notifyDataSetChanged();
-                xoaTrangForm();
-                Toast.makeText(MainActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        builder.create().show();
-        return true;
-    }
-    return super.onContextItemSelected(item);
-}
-```
-
----
-
-## 7. GIAO DIỆN XML CHI TIẾT
-
-### `activity_main.xml`
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="12dp"
-        android:text="QUẢN LÝ ĐẶT XE CỦA CỬA HÀNG CHO THUÊ Ô TÔ!"
-        android:textColor="#0080FF"
-        android:textSize="15sp"
-        android:textStyle="bold" />
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CarBookingManagement">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-    <TextView
-        android:id="@+id/tvBienSo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Biển số xe:"
-        android:textColor="#757575"
-        android:textSize="13sp" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DatXeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+    </application>
 
-    <EditText
-        android:id="@+id/edtBienSo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text" />
-
-    <TextView
-        android:id="@+id/tvNamSX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Năm sx (Đời xe):"
-        android:textColor="#757575"
-        android:textSize="13sp" />
-
-    <EditText
-        android:id="@+id/edtNamSX"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
-
-    <TextView
-        android:id="@+id/tvGiaTri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Giá trị Xe:"
-        android:textColor="#757575"
-        android:textSize="13sp" />
-
-    <EditText
-        android:id="@+id/edtGiaTri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberDecimal" />
-
-    <TextView
-        android:id="@+id/tvHangXe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hãng xe:"
-        android:textColor="#757575"
-        android:textSize="13sp" />
-
-    <Spinner
-        android:id="@+id/spnHangXe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:paddingBottom="8dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnThemXe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="THÊM XE" />
-
-        <Button
-            android:id="@+id/btnDatXe"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="ĐẶT XE" />
-
-        <Button
-            android:id="@+id/btnDong"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="ĐÓNG" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvDanhSachXe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Danh sách xe:"
-        android:textColor="#757575"
-        android:textSize="13sp" />
-
-    <ListView
-        android:id="@+id/lvDanhSachXe"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clickable="true"
-        android:contextClickable="true"
-        android:isScrollContainer="true"
-        android:longClickable="true"
-        android:saveEnabled="true" />
-
-</LinearLayout>
-```
-
-### `activity_datxe.xml`
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainDatXe"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context=".DatXeActivity">
-
-    <TextView
-        android:id="@+id/tvBookingInfoTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="16dp"
-        android:text="BOOKING INFO"
-        android:textColor="#E91E63"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tvTenKhachLabel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tên khách:"
-        android:textColor="#757575"
-        android:textSize="14sp" />
-
-    <EditText
-        android:id="@+id/edtTenKhach"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Nhập tên khách"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/btnThucHienDatXe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="ĐẶT XE" />
-
-    <Button
-        android:id="@+id/btnQuayLai"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="QUAY LẠI" />
-
-</LinearLayout>
+</manifest>
 ```
