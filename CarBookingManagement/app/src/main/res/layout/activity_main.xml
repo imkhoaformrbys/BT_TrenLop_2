@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="12dp"
+        android:text="QUẢN LÝ ĐẶT XE CỦA CỬA HÀNG CHO THUÊ Ô TÔ!"
+        android:textColor="#0080FF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvBienSo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Biển số xe:"
+        android:textColor="#757575"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/edtBienSo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/tvNamSX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Năm sx (Đời xe):"
+        android:textColor="#757575"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/edtNamSX"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/tvGiaTri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Giá trị Xe:"
+        android:textColor="#757575"
+        android:textSize="13sp" />
+
+    <EditText
+        android:id="@+id/edtGiaTri"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/tvHangXe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hãng xe:"
+        android:textColor="#757575"
+        android:textSize="13sp" />
+
+    <Spinner
+        android:id="@+id/spnHangXe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnThemXe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="THÊM XE" />
+
+        <Button
+            android:id="@+id/btnDatXe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="ĐẶT XE" />
+
+        <Button
+            android:id="@+id/btnDong"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ĐÓNG" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvDanhSachXe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Danh sách xe:"
+        android:textColor="#757575"
+        android:textSize="13sp" />
+
+    <ListView
+        android:id="@+id/lvDanhSachXe"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:contextClickable="true"
+        android:isScrollContainer="true"
+        android:longClickable="true"
+        android:saveEnabled="true" />
+
+</LinearLayout>

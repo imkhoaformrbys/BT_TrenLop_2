@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainDatXe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".DatXeActivity">
+
+    <TextView
+        android:id="@+id/tvBookingInfoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:text="BOOKING INFO"
+        android:textColor="#E91E63"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvTenKhachLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tên khách:"
+        android:textColor="#757575"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/edtTenKhach"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:ems="10"
+        android:hint="Nhập tên khách"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnThucHienDatXe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="ĐẶT XE" />
+
+    <Button
+        android:id="@+id/btnQuayLai"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="QUAY LẠI" />
+
+</LinearLayout>
